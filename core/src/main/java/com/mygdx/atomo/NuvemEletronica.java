@@ -32,9 +32,19 @@ public class NuvemEletronica {
     @Transient
     private Vector3 posNuvem = new Vector3();
 
-    private int tamArea = 150;
+    /* Ao alterar o Tamanho da area do atomo, conclui que ela deve ser proporcional ao A0
+       para que a nuvem continue com o formato esperado e mais realista :)
+       exempo:
 
-    private double  a0 = 25;
+       Quando se altera o tamanho da área para 150 e mantém o A0 como 20, a nuvem fica mais
+       quadrada, pois o A0 altera afeta o cálculo do ponto e calcula pontos alé da área delimitada pelos grids
+
+       Agora, se o A0 for pequeno e o tamanho da área grande, todos os pontos prováveis se tornam mais próximos e não ocupam
+       toda a área concedida
+     */
+    private int tamArea = 300;
+
+    private double  a0 = 20;
 
     @Transient
     private final Random rd = new Random();
@@ -131,6 +141,11 @@ public class NuvemEletronica {
 
     public NuvemEletronica( int tamArea, Nucleo infoN, ArrayList<Eletron> es) {
         this.tamArea = tamArea;
+        this.infoN = infoN;
+        this.eletrons = es;
+    }
+
+    public NuvemEletronica(  Nucleo infoN, ArrayList<Eletron> es) {
         this.infoN = infoN;
         this.eletrons = es;
     }

@@ -24,9 +24,6 @@
     public class Simulation extends ApplicationAdapter {
         private ModelBatch batch    ;
         private Texture image;
-        private Vector3 v = new Vector3(0,0,-550);
-        private Vector3 vb = new Vector3(0,0,550);
-        private Vector3 vc = new Vector3(0,0,0);
         public PerspectiveCamera cam;
         public Environment environment;
         public CameraInputController camCont;
@@ -35,24 +32,48 @@
         private EntityManager em;
 
         //partes do atomo
-        private Particula p = new Particula(v,0,0.0, 40f);
-        private  Nucleo n = new Nucleo(p);
-        private Particula pb = new Particula(vb,500,0.0, 40f);
-        private  Nucleo nb = new Nucleo(pb);
-        private Particula pc = new Particula(vc,500,0.0, 40f);
-        private  Nucleo nc = new Nucleo(pc);
-        private ArrayList<Eletron> el = new ArrayList<Eletron>();
-        private ArrayList<Eletron> elb = new ArrayList<Eletron>();
-        private ArrayList<Eletron> elc = new ArrayList<Eletron>();
-        private NuvemEletronica nu = new NuvemEletronica(300, n,20, el);
-        private NuvemEletronica nub = new NuvemEletronica(300, nb,20, elb);
-        private NuvemEletronica nuc = new NuvemEletronica(300, nc,20, elc);
-        private Atomo a = new Atomo( nu, n);
-        private Atomo ab = new Atomo( nub, nb);
-        private Atomo ac = new Atomo( nuc, nc);
+        private Vector3 v = new Vector3(0,0,-550);
+        private Vector3 vb = new Vector3(0,0,550);
+        private Vector3 vc = new Vector3(0,0,0);
+
+        private ArrayList<Vector3> pos = new ArrayList<Vector3>();
+        private ArrayList<Particula> ps = new ArrayList<Particula>();
+        private ArrayList<Nucleo> ns = new ArrayList<Nucleo>();
+        private ArrayList<ArrayList<Eletron>> els = new ArrayList<ArrayList<Eletron>>();
+        private ArrayList<NuvemEletronica> nus = new ArrayList<NuvemEletronica>();
+        private ArrayList<Atomo> as = new ArrayList<Atomo>();
+
+
 
         @Override
         public void create() {
+            pos.add(v);
+            pos.add(vb);
+            pos.add(vc);
+
+            for(Vector3 p : pos)
+                ps.add( new Particula(p, 500, 0.0, 40f));
+
+
+            for(Particula p : ps)
+                ns.add(new Nucleo(p));
+            
+            for(Nucleo n : ns)
+                els.add(new ArrayList<Eletron>());
+
+            for(ArrayList<Eletron> es : els){
+                for(int j =0; j<5000; j++) {
+                    es.add(new Eletron(0, 5f));
+                }
+            }
+
+            for(int i = 0; i < ns.size(); i++)
+                nus.add(new NuvemEletronica(ns.get(i), els.get(i)));
+
+
+
+            for(int i = 0; i < ns.size(); i++)
+                as.add(new Atomo(nus.get(i), ns.get(i)));
 
 
             //config janela
@@ -72,26 +93,18 @@
 
             //partes do atomo
 
-            nub.setOrbital(NuvemEletronica.Orbital.p2x);
-            nuc.setOrbital(NuvemEletronica.Orbital.p2y);
+            nus.get(1).setOrbital(NuvemEletronica.Orbital.p2x);
+            nus.get(2).setOrbital(NuvemEletronica.Orbital.p2y);
 
-            for(int i =0; i<5000; i++) {
-                el.add(new Eletron(0, 5f));
-                elb.add(new Eletron(0, 5f));
-                elc.add(new Eletron(0, 5f));
-            }
-            a.create();
-            ab.create();
-            ac.create();
-
-            nub.alternarOrb(false);
+            for(Atomo a: as)
+                a.create();
 
             try{
                 emf = Persistence.createEntityManagerFactory("MeuPU");
                 salvarAtomoBD();
 
             }catch (Exception e){
-                Gdx.app.error("Database", "Erro ao estabelecer conexão com o banco de dados!");
+                Gdx.app.error("DATABASE", "Erro ao estabelecer conexão com o banco de dados!");
             }
         }
 
@@ -107,9 +120,8 @@
 
             //partes do atomo
             batch.begin(cam);
-            ac.render(batch, cam, environment);
-            ab.render(batch, cam, environment);
-            a.render(batch, cam, environment);
+            for(Atomo a: as)
+                a.render(batch, cam, environment);
             batch.end();
 
 
@@ -117,9 +129,9 @@
 
         @Override
         public void dispose() {
-            ac.dispose();
-            ab.dispose();
-            a.dispose();
+
+            for(Atomo a: as)
+                a.dispose();
             batch.dispose();
             if (em != null) em.close();
             if (emf != null) emf.close();
@@ -135,10 +147,8 @@
                     EntityManager localEm = emf.createEntityManager();
                     try{
                         localEm.getTransaction().begin();
-                        localEm.persist(a);
-                        localEm.persist(ab);
-                        localEm.persist(ac);
-
+                        for(Atomo a : as )
+                            localEm.persist(a);
                         localEm.flush();
 
                         localEm.getTransaction().commit();
