@@ -42,14 +42,14 @@ public class NuvemEletronica {
        Agora, se o A0 for pequeno e o tamanho da área grande, todos os pontos prováveis se tornam mais próximos e não ocupam
        toda a área concedida
      */
-    private int tamArea = 300;
+    private int tamArea = 600;
 
     private double  a0 = 20;
 
     @Transient
     private final Random rd = new Random();
 
-    public enum Orbital {s1, s2, p2z, p2x, p2y};
+    public enum Orbital {s1, s2, p2z, p2x, p2y, s3,p3z};
 
     @Enumerated(EnumType.STRING)
     private Orbital orbAtl = Orbital.p2z;
@@ -187,6 +187,13 @@ public class NuvemEletronica {
             case p2y:
                 psi = rho * Math.exp(-rho / 2.0) * sinTheta * sinPhi;
                 return psi * psi;
+            case s3:
+                psi = (27 - 18*rho + 2*rho*rho) * Math.exp(-rho / 3.0);
+                return psi * psi * r * r;
+            case p3z:
+                psi = (6 - rho) * rho * Math.exp(-rho / 3.0) * cosTheta;
+                return psi * psi;
+
             default: psi = 0;
         }
 

@@ -57,7 +57,7 @@
 
             for(Particula p : ps)
                 ns.add(new Nucleo(p));
-            
+
             for(Nucleo n : ns)
                 els.add(new ArrayList<Eletron>());
 
@@ -93,8 +93,8 @@
 
             //partes do atomo
 
-            nus.get(1).setOrbital(NuvemEletronica.Orbital.p2x);
-            nus.get(2).setOrbital(NuvemEletronica.Orbital.p2y);
+            nus.get(1).setOrbital(NuvemEletronica.Orbital.p3z);
+            nus.get(2).setOrbital(NuvemEletronica.Orbital.p2z);
 
             for(Atomo a: as)
                 a.create();
