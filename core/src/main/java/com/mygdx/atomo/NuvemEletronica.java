@@ -49,7 +49,7 @@ public class NuvemEletronica {
     @Transient
     private final Random rd = new Random();
 
-    public enum Orbital {s1, s2, p2z, p2x, p2y, s3,p3z};
+    public enum Orbital {s1, s2, p2z, p2x, p2y, s3,p3z, p3x, p3y};
 
     @Enumerated(EnumType.STRING)
     private Orbital orbAtl = Orbital.p2z;
@@ -193,6 +193,12 @@ public class NuvemEletronica {
             case p3z:
                 psi = (6 - rho) * rho * Math.exp(-rho / 3.0) * cosTheta;
                 return psi * psi;
+            case p3x:
+                psi = (6 - rho) * rho * Math.exp(-rho / 3.0) * sinTheta * cosPhi;
+                return psi * psi;
+            case p3y:
+                psi = (6 - rho) * rho * Math.exp(-rho / 3.0) * sinTheta * sinPhi;
+                return psi * psi;
 
             default: psi = 0;
         }
@@ -206,7 +212,7 @@ public class NuvemEletronica {
             return (4.0 / Math.E) * 1.1;
         else{
             double pMax = 0f;
-            int grid = 40;
+            int grid = 30;
             float step = tamArea * 2f / grid;
             for (int ix = 0; ix <= grid; ix++)
                 for (int iy = 0; iy <= grid; iy++)

@@ -47,6 +47,8 @@
 
         @Override
         public void create() {
+
+            //partes do atomo
             pos.add(v);
             pos.add(vb);
             pos.add(vc);
@@ -62,8 +64,8 @@
                 els.add(new ArrayList<Eletron>());
 
             for(ArrayList<Eletron> es : els){
-                for(int j =0; j<5000; j++) {
-                    es.add(new Eletron(0, 5f));
+                for(int j =0; j<2000; j++) {
+                    es.add(new Eletron(0, 8f));
                 }
             }
 
@@ -74,6 +76,12 @@
 
             for(int i = 0; i < ns.size(); i++)
                 as.add(new Atomo(nus.get(i), ns.get(i)));
+
+            nus.get(1).setOrbital(NuvemEletronica.Orbital.p3x);
+            nus.get(2).setOrbital(NuvemEletronica.Orbital.p3y);
+
+            for(Atomo a: as)
+                a.create();
 
 
             //config janela
@@ -91,13 +99,6 @@
 
             batch = new ModelBatch();
 
-            //partes do atomo
-
-            nus.get(1).setOrbital(NuvemEletronica.Orbital.p3z);
-            nus.get(2).setOrbital(NuvemEletronica.Orbital.p2z);
-
-            for(Atomo a: as)
-                a.create();
 
             try{
                 emf = Persistence.createEntityManagerFactory("MeuPU");

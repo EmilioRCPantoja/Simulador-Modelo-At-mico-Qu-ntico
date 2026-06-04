@@ -25,7 +25,10 @@ public class Particula {
     private Double massa;
 
     @Transient
-    private Model model;
+    private static Model modelN;
+
+    @Transient
+    private static Model modelE;
 
     @Transient
     private ModelBuilder builder;
@@ -38,6 +41,15 @@ public class Particula {
     @Transient
     private ModelInstance instance;
 
+    @Transient
+    private static int refN = 0;
+
+    @Transient
+    private static int refE = 0;
+
+    @Transient
+    private int divs = 12;
+
     public Particula() {
 
     }
@@ -49,14 +61,6 @@ public class Particula {
 
     public void setInstance(ModelInstance instance) {
         this.instance = instance;
-    }
-
-    public Model getModel() {
-        return model;
-    }
-
-    public void setModel(Model model) {
-        this.model = model;
     }
 
     public Vector3 getPos() {
@@ -91,11 +95,14 @@ public class Particula {
         this.builder = builder;
     }
 
+    public void setDivs(int div){ this.divs = div;}
+
+    public int getDivs(){return this.divs;}
+
     public Particula(Vector3 pos, int carga, Double massa, ModelBatch batch, Model model, ModelBuilder builder, ModelInstance instance) {
         this.pos = pos;
         this.carga = carga;
         this.massa = massa;
-        this.model = model;
         this.builder = builder;
         this.instance = instance;
     }
@@ -108,16 +115,24 @@ public class Particula {
     }
 
     public void create(){
-        this.builder = new ModelBuilder();
+            if (tam > 10f) { // nucleo
+                if (modelN == null)
+                    modelN = new ModelBuilder().createSphere(tam, tam, tam, divs, divs,
+                        new Material(ColorAttribute.createDiffuse(Color.RED)),
+                        VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+                refN++;
+                this.instance = new ModelInstance(modelN);
+            } else { // eletron
+                if (modelE == null)
+                    modelE = new ModelBuilder().createSphere(tam, tam, tam, divs, divs,
+                        new Material(ColorAttribute.createDiffuse(Color.RED)),
+                        VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
+                refE++;
+                this.instance = new ModelInstance(modelE);
+            }
+            colorAttribute = (ColorAttribute) instance.materials.get(0).get(ColorAttribute.Diffuse);
+            this.instance.transform.setToTranslation(pos);
 
-        this.model =builder.createSphere(this.tam, this.tam, this.tam, 20, 20,
-            new Material(ColorAttribute.createDiffuse(Color.RED)),
-            VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
-
-        this.instance = new ModelInstance( this.model);
-        colorAttribute = (ColorAttribute) instance.materials.get(0).get(ColorAttribute.Diffuse);
-
-        this.instance.transform.setToTranslation(pos);
     }
 
     public float getTam() {
@@ -131,7 +146,11 @@ public class Particula {
     }
 
     public void dispose(){
-        this.model.dispose();
+        if (tam > 10f) {
+            if (--refN <= 0) { modelN.dispose(); modelN = null; }
+        } else {
+            if (--refE <= 0) { modelE.dispose(); modelE = null; }
+        }
     }
 
     public void translation(Vector3 pos){
@@ -149,7 +168,6 @@ public class Particula {
             ", pos=" + pos +
             ", carga=" + carga +
             ", massa=" + massa +
-            ", model=" + model +
             ", builder=" + builder +
             ", tam=" + tam +
             ", colorAttribute=" + colorAttribute +

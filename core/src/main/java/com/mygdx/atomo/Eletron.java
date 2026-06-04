@@ -81,6 +81,7 @@ public class Eletron {
     public void render(ModelBatch batch,PerspectiveCamera cam, Environment env){
         infoP.render(batch, cam,env);
         infoP.mudarCor(Color.BLACK);
+        infoP.setDivs(8);
     }
 
     @Override
