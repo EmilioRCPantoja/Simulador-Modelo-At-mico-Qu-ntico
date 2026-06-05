@@ -64,7 +64,7 @@
                 els.add(new ArrayList<Eletron>());
 
             for(ArrayList<Eletron> es : els){
-                for(int j =0; j<2000; j++) {
+                for(int j =0; j<3000; j++) {
                     es.add(new Eletron(0, 8f));
                 }
             }
@@ -82,6 +82,8 @@
 
             for(Atomo a: as)
                 a.create();
+
+            as.get(0).getNuvem().alternarOrb(true);
 
 
             //config janela

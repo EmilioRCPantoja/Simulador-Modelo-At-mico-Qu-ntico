@@ -61,6 +61,9 @@ public class NuvemEletronica {
 
     private static final int POR_FRAME = 100;
 
+    @Transient
+    private Timer.Task taskAlt;
+
 
     //Getters e Setters
     public List<Eletron> getEletrons() {
@@ -326,86 +329,32 @@ public class NuvemEletronica {
     }
 
     public void alternarOrb(boolean ligar){
-        Timer.Task t = new Timer.Task() {
-            @Override
-            public void run() {
+        if (ligar) {
+
+            if (taskAlt == null || !taskAlt.isScheduled()) {
+                taskAlt = new Timer.Task() {
+                    @Override
+                    public void run() {
+
+                        Orbital[] orbitais = Orbital.values();
+
+
+                        int proximoIndex = (orbAtl.ordinal() + 1) % orbitais.length;
+
+
+                        setOrbital(orbitais[proximoIndex]);
+                    }
+                };
+
+
+                Timer.schedule(taskAlt, 20f, 20f);
             }
-        };
-        if(ligar){
-            if(this.orbAtl == Orbital.s1){
-                t = Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        setOrbital(Orbital.s1);
-                    }
-                },0,5);
+        } else {
 
-
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        setOrbital(Orbital.s2);
-                    }
-                },5,5);
-
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        setOrbital(Orbital.p2z);
-                    }
-                },11,5);
+            if (taskAlt != null) {
+                taskAlt.cancel();
+                taskAlt = null;
             }
-
-            if(this.orbAtl == Orbital.s2){
-                t = Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        setOrbital(Orbital.s2);
-                    }
-                },0,5);
-
-
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        setOrbital(Orbital.p2z);
-                    }
-                },5,5);
-
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        setOrbital(Orbital.s1);
-                    }
-                },11,5);
-            }
-
-            if(this.orbAtl == Orbital.p2z){
-                t = Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        setOrbital(Orbital.p2z);
-                    }
-                },0,5);
-
-
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        setOrbital(Orbital.s1);
-                    }
-                },5,5);
-
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        setOrbital(Orbital.s2);
-                    }
-                },11,5);
-            }
-        }
-        else{
-            t.cancel();
         }
 
     }

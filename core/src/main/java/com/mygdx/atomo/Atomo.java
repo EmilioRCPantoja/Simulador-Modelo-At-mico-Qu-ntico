@@ -20,6 +20,22 @@ public class Atomo {
     @JoinColumn(name = "nucleo_id", unique = true)
     private Nucleo nucleo;
 
+    public NuvemEletronica getNuvem() {
+        return nuvem;
+    }
+
+    public void setNuvem(NuvemEletronica nuvem) {
+        this.nuvem = nuvem;
+    }
+
+    public Nucleo getNucleo() {
+        return nucleo;
+    }
+
+    public void setNucleo(Nucleo nucleo) {
+        this.nucleo = nucleo;
+    }
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "nuvem_id", unique = true)
     private NuvemEletronica nuvem;
