@@ -34,10 +34,10 @@ public class NuvemEletronica {
 
     /* Ao alterar o Tamanho da area do atomo, conclui que ela deve ser proporcional ao A0
        para que a nuvem continue com o formato esperado e mais realista :)
-       exempo:
+       exemplo:
 
        Quando se altera o tamanho da área para 150 e mantém o A0 como 20, a nuvem fica mais
-       quadrada, pois o A0 altera afeta o cálculo do ponto e calcula pontos alé da área delimitada pelos grids
+       quadrada, pois o A0 altera afeta o cálculo do ponto e calcula pontos além da área delimitada pelos grids
 
        Agora, se o A0 for pequeno e o tamanho da área grande, todos os pontos prováveis se tornam mais próximos e não ocupam
        toda a área concedida
@@ -52,7 +52,7 @@ public class NuvemEletronica {
     public enum Orbital {s1, s2, p2z, p2x, p2y, s3,p3z, p3x, p3y};
 
     @Enumerated(EnumType.STRING)
-    private Orbital orbAtl = Orbital.p2z;
+    private Orbital orbAtl = Orbital.s1;
 
     private double pMaxCache;
 
@@ -104,6 +104,10 @@ public class NuvemEletronica {
 
     public void setA0(double a0) {
         this.a0 = a0;
+    }
+
+    public Orbital getOrbAtual(){
+        return this.orbAtl;
     }
 
     //contrutores
@@ -347,7 +351,7 @@ public class NuvemEletronica {
                 };
 
 
-                Timer.schedule(taskAlt, 20f, 20f);
+                Timer.schedule(taskAlt, 10f, 10f);
             }
         } else {
 
