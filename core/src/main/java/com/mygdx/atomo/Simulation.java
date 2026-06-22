@@ -17,6 +17,7 @@
     import com.badlogic.gdx.math.Vector3;
     import com.badlogic.gdx.utils.ScreenUtils;
     import com.badlogic.gdx.utils.Timer;
+    import jakarta.persistence.Entity;
     import jakarta.persistence.EntityManager;
     import jakarta.persistence.EntityManagerFactory;
     import jakarta.persistence.Persistence;
@@ -71,7 +72,7 @@
 
             for(ArrayList<Eletron> es : els){
                 for(int j =0; j<2000; j++) {
-                    es.add(new Eletron(0, 5f));
+                    es.add(new Eletron(5));
                 }
             }
 
@@ -116,12 +117,26 @@
 
 
             try{
-                emf = Persistence.createEntityManagerFactory("MeuPU");
-                salvarAtomoBD();
+                emf = Persistence.createEntityManagerFactory("PU_MySQL");
+                EntityManager testeEm = emf.createEntityManager();
+
+                Gdx.app.log("DATABASE", "Sucesso! Conectado ao MySQL.");
 
             }catch (Exception e){
-                Gdx.app.error("DATABASE", "Erro ao estabelecer conexão com o banco de dados!");
+                Gdx.app.error("DATABASE", "Falha no MySQL. Erro: " + e.getMessage());
+                Gdx.app.log("DATABASE", "Iniciando fallback para SQLite local...");
+
+                try {
+                    emf = Persistence.createEntityManagerFactory("PU_SQLite");
+                    Gdx.app.log("DATABASE", "Sucesso! Usando banco de dados SQLite local (atomos_db.sqlite).");
+                } catch (Exception ex) {
+                    Gdx.app.error("DATABASE", "FALHA CRÍTICA! Nem MySQL nem SQLite funcionaram.", ex);
+                    emf = null;
+                }
             }
+
+            if(emf != null)
+                salvarAtomoBD();
         }
 
         @Override

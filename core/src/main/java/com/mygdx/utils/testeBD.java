@@ -11,7 +11,7 @@ public class testeBD {
     public static void main(String[] args) {
         Vector3 pos = new Vector3(0,0,0);
         Particula p = new Particula(pos,1,3.3,5f);
-        Eletron e = new Eletron(1,2);
+        Eletron e = new Eletron(2);
         Nucleo n = new Nucleo();
         n.addParticula(p);
         NuvemEletronica nu = new NuvemEletronica(10, n);
