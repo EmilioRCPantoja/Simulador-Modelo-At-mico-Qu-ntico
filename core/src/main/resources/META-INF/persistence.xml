@@ -41,6 +41,7 @@
             <property name="jakarta.persistence.jdbc.password" value="" />
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.jdbc.use_get_generated_keys" value="false" />
 
             <property name="hibernate.dialect" value="com.mygdx.utils.CodeSQLiteDialect" />
 

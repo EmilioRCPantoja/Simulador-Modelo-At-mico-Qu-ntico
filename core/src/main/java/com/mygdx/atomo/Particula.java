@@ -15,6 +15,7 @@ import jakarta.persistence.*;
 public class Particula {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "INTEGER")
     private Long id;
 
     @Transient

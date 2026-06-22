@@ -17,7 +17,7 @@ import java.util.Random;
 public class NuvemEletronica {
 
     @Id
-    @Column(name = "infoNucleo")
+    @Column(name = "infoNucleo", columnDefinition = "INTEGER")
     private Long id;
 
     @OneToOne

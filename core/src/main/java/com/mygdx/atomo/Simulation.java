@@ -117,7 +117,7 @@
 
 
             try{
-                emf = Persistence.createEntityManagerFactory("PU_MySQL");
+                emf = Persistence.createEntityManagerFactory("PU_MASQL");
                 EntityManager testeEm = emf.createEntityManager();
 
                 Gdx.app.log("DATABASE", "Sucesso! Conectado ao MySQL.");

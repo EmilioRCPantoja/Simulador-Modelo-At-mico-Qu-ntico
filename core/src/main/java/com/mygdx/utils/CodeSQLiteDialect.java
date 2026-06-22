@@ -4,6 +4,8 @@ import org.hibernate.boot.model.TypeContributions;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.identity.IdentityColumnSupport;
 import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
+import org.hibernate.id.PostInsertIdentityPersister;
+import org.hibernate.id.insert.InsertGeneratedIdentifierDelegate;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.SqlTypes;
 import org.hibernate.type.descriptor.sql.internal.DdlTypeImpl;
@@ -28,14 +30,20 @@ public class CodeSQLiteDialect extends Dialect {
             }
 
             @Override
-            public String getIdentityInsertString() {
-                return "null";
+            public String getIdentitySelectString(String table, String column, int type) {
+                return "select last_insert_rowid()";
+            }
+
+            public boolean supportsGeneratedKeys() {
+                return false;
             }
 
             @Override
             public boolean hasDataTypeInIdentityColumn() {
                 return false;
             }
+
+           
         };
     }
 

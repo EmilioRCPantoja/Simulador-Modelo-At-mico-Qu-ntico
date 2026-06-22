@@ -15,7 +15,7 @@ import java.util.Random;
 @Table(name = "Eletron")
 public class Eletron {
     @Id
-    @Column(name = "infoP")
+    @Column(name = "infoP", columnDefinition = "INTEGER")
     private Long id;
 
     @Transient

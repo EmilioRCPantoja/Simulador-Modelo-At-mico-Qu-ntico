@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 public class Atomo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "INTEGER")
     private Long id;
 
     @Transient

@@ -14,7 +14,9 @@ import java.util.List;
 public class Nucleo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "INTEGER")
     private Long id;
+
 
     private double qtdParticula = 0;
 
