@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.math.Vector3;
 import jakarta.persistence.*;
+import org.hibernate.type.descriptor.sql.internal.Scale6IntervalSecondDdlType;
+
+import java.util.Random;
 
 
 @Entity
@@ -27,9 +30,12 @@ public class Eletron {
 
     private float tam;
 
-    public Eletron(int nivelEnergia, float tamanho){
-        this.nivelEnergia = nivelEnergia;
-        this.tam = tamanho;
+    public Eletron(int tamanho){
+        Random rd = new Random();
+        int a = rd.nextInt(tamanho) + 1;
+        this.nivelEnergia = rd.nextInt(5);
+        //this.tam = tam;
+        this.tam = a * 2;
         infoP = new Particula(pos,1,0d,tam);
     }
 
@@ -80,7 +86,27 @@ public class Eletron {
 
     public void render(ModelBatch batch,PerspectiveCamera cam, Environment env){
         infoP.render(batch, cam,env);
-        infoP.mudarCor(Color.BLACK);
+
+        switch (this.nivelEnergia) {
+            case 0 :
+                infoP.mudarCor(Color.YELLOW);
+                break;
+            case 1 :
+                infoP.mudarCor(Color.RED);
+                break;
+            case 2 :
+                infoP.mudarCor(Color.BLUE);
+                break;
+            case 3 :
+                infoP.mudarCor(Color.GREEN);
+                break;
+            case 4 :
+                infoP.mudarCor(Color.PURPLE);
+                break;
+        }
+
+        //infoP.mudarCor(Color.BLACK);
+
         infoP.setDivs(8);
     }
 

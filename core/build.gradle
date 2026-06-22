@@ -14,6 +14,7 @@ dependencies {
   implementation 'org.hibernate.orm:hibernate-core:6.6.0.Final'
   implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
   implementation 'com.mysql:mysql-connector-j:9.0.0'
+  implementation 'org.xerial:sqlite-jdbc:3.45.1.0'
 
   if(enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"

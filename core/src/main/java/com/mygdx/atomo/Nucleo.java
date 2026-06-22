@@ -16,6 +16,8 @@ public class Nucleo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private double qtdParticula = 0;
+
     @Override
     public String toString() {
         String s = "Nucleo{" +
@@ -42,6 +44,7 @@ public class Nucleo {
         nucleo.add(p);
         Vector3 po = pontoMedio((ArrayList<Particula>) nucleo);
         this.posNucleo = po;
+        this.qtdParticula ++;
     }
 
     public Nucleo (List<Particula> p){
@@ -49,6 +52,7 @@ public class Nucleo {
         Vector3 po = pontoMedio((ArrayList<Particula>) nucleo);
 
         this.posNucleo = po;
+        this.qtdParticula = p.size();
     }
 
     public Nucleo() {
@@ -71,6 +75,7 @@ public class Nucleo {
     public void setNucleo(List<Particula> nucleo) {
         this.nucleo = nucleo;
         this.posNucleo = pontoMedio(this.nucleo);
+        this.qtdParticula = nucleo.size();
     }
 
     public void create(){
@@ -112,6 +117,7 @@ public class Nucleo {
     public void addParticula(Particula p){
         this.nucleo.add(p);
         this.posNucleo = pontoMedio((ArrayList<Particula>) nucleo);
+        this.qtdParticula ++;
     }
 
     public double getTam(){
