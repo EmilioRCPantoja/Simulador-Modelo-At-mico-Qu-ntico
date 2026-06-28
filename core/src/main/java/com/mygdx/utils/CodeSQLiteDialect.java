@@ -4,8 +4,6 @@ import org.hibernate.boot.model.TypeContributions;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.identity.IdentityColumnSupport;
 import org.hibernate.dialect.identity.IdentityColumnSupportImpl;
-import org.hibernate.id.PostInsertIdentityPersister;
-import org.hibernate.id.insert.InsertGeneratedIdentifierDelegate;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.SqlTypes;
 import org.hibernate.type.descriptor.sql.internal.DdlTypeImpl;
@@ -43,7 +41,7 @@ public class CodeSQLiteDialect extends Dialect {
                 return false;
             }
 
-           
+
         };
     }
 

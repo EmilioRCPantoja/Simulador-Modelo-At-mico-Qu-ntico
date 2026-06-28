@@ -148,9 +148,15 @@ public class Particula {
 
     public void dispose(){
         if (tam > 10f) {
-            if (--refN <= 0) { modelN.dispose(); modelN = null; }
+            if (--refN <= 0 && modelN != null) {
+                modelN.dispose();
+                modelN = null;
+            }
         } else {
-            if (--refE <= 0) { modelE.dispose(); modelE = null; }
+            if (--refE <= 0 && modelE != null) {
+                modelE.dispose();
+                modelE = null;
+            }
         }
     }
 
@@ -174,5 +180,14 @@ public class Particula {
             ", colorAttribute=" + colorAttribute +
             ", instance=" + instance +
             '}';
+    }
+
+    public void setTam(float tam) {
+        this.tam = tam;
+
+        if (this.instance != null) {
+
+            this.instance.transform.setToTranslation(this.pos).scl(tam);
+        }
     }
 }

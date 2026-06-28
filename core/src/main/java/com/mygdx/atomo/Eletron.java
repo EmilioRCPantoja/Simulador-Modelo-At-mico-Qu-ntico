@@ -28,17 +28,17 @@ public class Eletron {
 
     private int nivelEnergia;
 
-    private float tam;
+    private Float tam;
 
-    public Eletron(int tamanho){
-        Random rd = new Random();
-        int a = rd.nextInt(tamanho) + 1;
+    @Transient
+    Random rd = new Random();
+
+    public Eletron(float tamanho){
         this.nivelEnergia = rd.nextInt(5);
-        //this.tam = tam;
-        this.tam = a * 2;
-        infoP = new Particula(pos,1,0d,tam);
-    }
+        this.tam = tamanho;
 
+        infoP = new Particula(pos, 1, 0d, tam);
+    }
     public Eletron() {
 
     }
@@ -85,7 +85,10 @@ public class Eletron {
     }
 
     public void render(ModelBatch batch,PerspectiveCamera cam, Environment env){
-        infoP.render(batch, cam,env);
+        int a = rd.nextInt(this.tam.intValue()) + 1;
+        this.tam = a * 2f;
+
+        infoP.setTam(this.tam);
 
         switch (this.nivelEnergia) {
             case 0 :
@@ -108,6 +111,7 @@ public class Eletron {
         //infoP.mudarCor(Color.BLACK);
 
         infoP.setDivs(8);
+        infoP.render(batch, cam,env);
     }
 
     @Override

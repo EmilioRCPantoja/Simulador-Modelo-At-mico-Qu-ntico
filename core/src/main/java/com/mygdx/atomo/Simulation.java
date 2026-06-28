@@ -2,6 +2,7 @@
 
     import com.badlogic.gdx.ApplicationAdapter;
     import com.badlogic.gdx.Gdx;
+    import com.badlogic.gdx.Input;
     import com.badlogic.gdx.graphics.Color;
     import com.badlogic.gdx.graphics.GL20;
     import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -34,6 +35,8 @@
         public CameraInputController camCont;
         private SpriteBatch spriteBatch;
         private BitmapFont font;
+        private Vector3 camPos = new Vector3();
+        private int atomoAtual = 0;
 
         //conexão banco
         private EntityManagerFactory emf;
@@ -56,9 +59,12 @@
         public void create() {
 
             //partes do atomo
-            //pos.add(v);
-            //pos.add(vb);
+            pos.add(v);
+            pos.add(vb);
             pos.add(vc);
+
+            atomoAtual = 0;
+            camPos = pos.get(atomoAtual);
 
             for(Vector3 p : pos)
                 ps.add( new Particula(p, 500, 0.0, 40f));
@@ -117,7 +123,7 @@
 
 
             try{
-                emf = Persistence.createEntityManagerFactory("PU_MASQL");
+                emf = Persistence.createEntityManagerFactory("PU_MySQL");
                 EntityManager testeEm = emf.createEntityManager();
 
                 Gdx.app.log("DATABASE", "Sucesso! Conectado ao MySQL.");
@@ -143,6 +149,8 @@
         public void render() {
             //config janela
 
+            trocaAtomo();
+
             ScreenUtils.clear(1, 1, 1, 1, true);
 
             Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -151,7 +159,8 @@
             float gpers = 2f;
             float ang = gpers +Gdx.graphics.getDeltaTime();
 
-            cam.rotateAround(pos.get(0), Vector3.Y, ang);
+            cam.up.set(Vector3.Y);
+            cam.rotateAround(camPos, Vector3.Y, ang);
 
             cam.update();
             camCont.update();
@@ -164,7 +173,7 @@
 
             spriteBatch.begin();
 
-            String info = "Átomos: " + as.size() + " | Orbital atual: " + as.get(0).getNuvem().getOrbAtual();
+            String info = "Átomos: " + as.size() + " | Orbital atual: " + as.get(atomoAtual).getNuvem().getOrbAtual() + "\nUse as setinhas para trocar de átomo";
             font.draw(spriteBatch, info, 10, Gdx.graphics.getHeight() - 10);
 
             spriteBatch.end();
@@ -214,5 +223,25 @@
             }).start();
         }
 
+        public void trocaAtomo(){
+            boolean trocou = false;
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) && atomoAtual > 0) {
+                atomoAtual--;
+                trocou = true;
+            }
+            if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) && atomoAtual < as.size() - 1) {
+                atomoAtual++;
+                trocou = true;
+            }
+
+            if (trocou) {
+                camPos = pos.get(atomoAtual);
+                cam.position.set(camPos.x + 800f, camPos.y + 450f, camPos.z + 550f);
+                cam.up.set(Vector3.Y);
+                cam.lookAt(camPos);
+                cam.update();
+            }
+        }
 
     }

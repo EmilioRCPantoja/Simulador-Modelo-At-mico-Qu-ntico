@@ -263,30 +263,6 @@ public class NuvemEletronica {
             e.create();
         this.pMaxCache = pMax();
         recalcPos();
-
-        System.out.println("pMaxCache=" + pMaxCache);
-        System.out.println("prob(0,0,0.001)=" + probabilidade(0,0,0.001));
-        System.out.println("prob(0,0,50)=" + probabilidade(0,0,50));
-        System.out.println("prob(0,0,150)=" + probabilidade(0,0,150));
-
-        int aceitos=0, rejeitados=0;
-        double somaR=0, maxR=0;
-        for(int i=0; i<10000; i++){
-            float x=(float)((rd.nextDouble()*2-1)*tamArea);
-            float y=(float)((rd.nextDouble()*2-1)*tamArea);
-            float z=(float)((rd.nextDouble()*2-1)*tamArea);
-            double prob=probabilidade(x,y,z);
-            if(rd.nextDouble()*pMaxCache < prob){
-                aceitos++;
-                double r=Math.sqrt(x*x+y*y+z*z);
-                somaR+=r;
-                if(r>maxR) maxR=r;
-            } else rejeitados++;
-        }
-        System.out.println("aceitos="+aceitos+" rejeitados="+rejeitados);
-        System.out.println("r medio="+(somaR/aceitos));
-        System.out.println("r max="+maxR);
-
     }
 
     public void dispose(){
