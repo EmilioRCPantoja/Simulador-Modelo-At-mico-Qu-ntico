@@ -43,9 +43,9 @@
         private EntityManager em;
 
         //partes do atomo
-        private Vector3 v = new Vector3(0,0,-550);
-        private Vector3 vb = new Vector3(0,0,550);
-        private Vector3 vc = new Vector3(0,0,0);
+        private Vector3 v = new Vector3(0,0,-35550);
+        private Vector3 vc = new Vector3(0,0,35550);
+        private Vector3 vb = new Vector3(0,0,0);
         private ArrayList<Vector3> pos = new ArrayList<Vector3>();
         private ArrayList<Particula> ps = new ArrayList<Particula>();
         private ArrayList<Nucleo> ns = new ArrayList<Nucleo>();
@@ -59,9 +59,9 @@
         public void create() {
 
             //partes do atomo
-            pos.add(v);
+            //pos.add(v);
             pos.add(vb);
-            pos.add(vc);
+            //pos.add(vc);
 
             atomoAtual = 0;
             camPos = pos.get(atomoAtual);
@@ -90,10 +90,6 @@
             for(int i = 0; i < ns.size(); i++)
                 as.add(new Atomo(nus.get(i), ns.get(i)));
 
-            //nus.get(0).setOrbital(NuvemEletronica.Orbital.p3z);
-            //nus.get(1).setOrbital(NuvemEletronica.Orbital.p3x);
-            //nus.get(2).setOrbital(NuvemEletronica.Orbital.p3y);
-
             for(Atomo a: as)
                 a.create();
 
@@ -104,10 +100,10 @@
             environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.2f, 0.2f, 0.2f, 0.5f));
             environment.add(new DirectionalLight().set(0.4f, 0.4f, 0.4f, -1f, -0.5f, 1f));
             cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            cam.position.set(800f,450f,550f);
-            cam.lookAt(vc);
+            cam.position.set(camPos.x + 800f, camPos.y + 450f, camPos.z + 550f);
+            cam.lookAt(camPos);
             cam.near = 1f;
-            cam.far = 10000f;
+            cam.far = 200000f;
             cam.update();
             camCont = new CameraInputController(cam);
             Gdx.input.setInputProcessor(camCont);
@@ -121,7 +117,7 @@
             generator.dispose();
             batch = new ModelBatch();
 
-
+            //persitência
             try{
                 emf = Persistence.createEntityManagerFactory("PU_MySQL");
                 EntityManager testeEm = emf.createEntityManager();
